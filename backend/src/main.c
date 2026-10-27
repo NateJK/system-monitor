@@ -42,24 +42,6 @@ int main(void) {
 
     char line[256];
 
-    struct Process current_process;
-
-    while (fgets(line, sizeof(line), sys_info) != NULL) {
-        if (strncmp(line, "Pid:", 4) == 0) {
-            if (sscanf(line, "Pid: %d", &current_process.pid) == 1) {
-                printf("PID: %d\n", current_process.pid);
-            }
-        }
-
-        if (strncmp(line, "VmRSS:", 6) == 0) {
-            if (sscanf(line, "VmRSS: %d kB", &current_process.memory_kb) == 1) {
-                printf("VmRSS: %d\n", current_process.memory_kb);                
-            }
-        }
-    }
-
-    fclose(sys_info);
-
     DIR *proc_dir = opendir("/proc");
 
     if (proc_dir == NULL) {
@@ -86,16 +68,22 @@ int main(void) {
 
             struct Process current_process = {0};
 
+            int found_memory = 0;
+
             while (fgets(line, sizeof(line), process_info) != NULL) {
                 if (strncmp(line, "Pid:", 4) == 0) {
                     sscanf(line, "Pid: %d", &current_process.pid);
                 } else if (strncmp(line, "VmRSS:", 6) == 0) {
                     sscanf(line, "VmRSS: %d kB", &current_process.memory_kb);
+                    found_memory = 1;
                 }
             }
 
-            printf("PID: %d | Memory: %d kB\n", current_process.pid, current_process.memory_kb);
+            if (found_memory) {
+                printf("PID: %d | Memory: %d kB\n", current_process.pid, current_process.memory_kb);
+            }
 
+            found_memory = 0;
         }
     }
 
