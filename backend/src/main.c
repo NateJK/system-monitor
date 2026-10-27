@@ -74,6 +74,20 @@ int main(void) {
     while ((entry = readdir(proc_dir)) != NULL) {
         if (is_numeric(entry->d_name)) {
             snprintf(path, sizeof(path), "/proc/%s/status", entry->d_name);
+
+            FILE *process_info;
+            process_info = fopen(path, "r");
+
+            if (process_info == NULL) {
+                perror("fopen");
+
+                return 1;
+            }
+
+            while (fgets(path, sizeof(path), process_info) != NULL) {
+                printf(path);
+            }
+
             printf("%s\n", path);
         }
     }
