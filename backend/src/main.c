@@ -69,9 +69,12 @@ int main(void) {
 
     struct dirent *entry;
 
+    char path[256];
+
     while ((entry = readdir(proc_dir)) != NULL) {
         if (is_numeric(entry->d_name)) {
-            printf("%s\n", entry->d_name);
+            snprintf(path, sizeof(path), "/proc/%s/status", entry->d_name);
+            printf(path);
         }
     }
 
