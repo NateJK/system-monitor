@@ -18,16 +18,16 @@ int main(void) {
     char line[256];
 
     while (fgets(line, sizeof(line), sys_info) != NULL) {
-        if (strstr(line, "Pid:") != NULL) {
+        if (strncmp(line, "Pid:", 4) == 0) {
             printf("%s", line);
         }
 
-        if (strstr(line, "VmRSS:") != NULL) {
+        if (strncmp(line, "VmRSS:", 6) == 0) {
             printf("%s", line);
         }
     }
 
     fclose(sys_info);
-    
+
     return 0;
 }
