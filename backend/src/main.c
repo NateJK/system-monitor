@@ -74,8 +74,9 @@ int main(void) {
                 if (strncmp(line, "Pid:", 4) == 0) {
                     sscanf(line, "Pid: %d", &current_process.pid);
                 } else if (strncmp(line, "VmRSS:", 6) == 0) {
-                    sscanf(line, "VmRSS: %d kB", &current_process.memory_kb);
-                    found_memory = 1;
+                    if (sscanf(line, "VmRSS: %d kB", &current_process.memory_kb) == 1) {
+                        found_memory = 1;
+                    }
                 }
             }
 
