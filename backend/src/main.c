@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <dirent.h>
+#include <ctype.h>
 
 // Start of the source c code for system_monitor application
 
@@ -9,6 +10,22 @@ struct Process {
     int pid;
     int memory_kb;
 };
+
+int is_numeric(const char *name) {
+    if (*name == '\0') {
+        return 0;
+    }
+
+    while (*name != '\0') {
+        if(!isdigit((unsigned char)*name)) {
+            return 0;
+        }
+
+        name++;
+    }
+
+    return 1;
+}
 
 int main(void) {
 
@@ -53,7 +70,9 @@ int main(void) {
     struct dirent *entry;
 
     while ((entry = readdir(proc_dir)) != NULL) {
-        printf("%s\n", entry->d_name);
+        if (is_numeric(entry->d_name)) {
+            printf("%s\n", entry->d_name);
+        }
     }
 
     closedir(proc_dir);
