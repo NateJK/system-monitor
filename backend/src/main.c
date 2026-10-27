@@ -84,8 +84,20 @@ int main(void) {
                 return 1;
             }
 
+            struct Process current_process = {0};
+
             while (fgets(path, sizeof(path), process_info) != NULL) {
-                printf(path);
+                if (strncmp(path, "Pid:", 4) == 0) {
+                    if (sscanf(path, "Pid: %d", &current_process.pid) == 1) {
+                        printf("PID: %d\n", current_process.pid);
+                    }
+                }
+
+                if (strncmp(path, "VmRSS:", 6) == 0) {
+                    if (sscanf(path, "VmRSS: %d kB", &current_process.memory_kb) == 1) {
+                        printf("VmRSS: %d\n", current_process.memory_kb);                
+                    }
+                }
             }
 
             printf("%s\n", path);
