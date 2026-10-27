@@ -9,7 +9,7 @@
 struct Process {
     int pid;
     int memory_kb;
-    char *name;
+    char name[16];
 };
 
 int is_numeric(const char *name) {
@@ -82,15 +82,15 @@ int main(void) {
                         found_memory = 1;
                     }
                 } else if (strncmp(line, "Name:", 5) == 0) {
-                    sscanf(line, "Name: %s", &current_process.name);
+                    sscanf(line, "Name: %15s", current_process.name);
                 }
             }
 
             if (found_memory && found_pid) {
                 printf("Name: %s | PID: %d | Memory: %d kB\n", current_process.name, current_process.pid, current_process.memory_kb);
             }
+            fclose(process_info);
         }
-        fclose(path);
     }
 
     closedir(proc_dir);
