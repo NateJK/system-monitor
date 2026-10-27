@@ -74,8 +74,7 @@ int main(void) {
     while ((entry = readdir(proc_dir)) != NULL) {
         if (is_numeric(entry->d_name)) {
             snprintf(path, sizeof(path), "/proc/%s/status", entry->d_name);
-            printf(path);
-            printf('\0');
+            printf("%s\n", path);
         }
     }
 
