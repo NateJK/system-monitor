@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <dirent.h>
 
 // Start of the source c code for system_monitor application
 
@@ -41,6 +42,21 @@ int main(void) {
     }
 
     fclose(sys_info);
+
+    DIR *proc_dir = opendir("/proc");
+
+    if (proc_dir == NULL) {
+        perror("opendir");
+        return 1;
+    }
+
+    struct dirent *entry;
+
+    while ((entry = readdir(proc_dir)) != NULL) {
+        printf("%s\n", entry->d_name);
+    }
+
+    closedir(proc_dir);
 
     return 0;
 }
