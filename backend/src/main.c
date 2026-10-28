@@ -60,6 +60,7 @@ int main(void) {
 
             int found_memory = 0;
             int found_pid = 0;
+            int found_name = 0;
 
             while (fgets(line, sizeof(line), process_info) != NULL) {
                 if (strncmp(line, "Pid:", 4) == 0) {
@@ -71,13 +72,16 @@ int main(void) {
                         found_memory = 1;
                     }
                 } else if (strncmp(line, "Name:", 5) == 0) {
-                    sscanf(line, "Name: %15s", current_process.name);
+                    if (sscanf(line, "Name: %15s", current_process.name) == 1) {
+                        found_name = 1;
+                    }
                 }
             }
 
-            if (found_memory && found_pid) {
+            if (found_memory && found_pid && found_name) {
                 printf("Name: %s | PID: %d | Memory: %d kB\n", current_process.name, current_process.pid, current_process.memory_kb);
             }
+            
             fclose(process_info);
         }
     }
