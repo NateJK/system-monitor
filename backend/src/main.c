@@ -78,10 +78,10 @@ int main(void) {
                 }
             }
 
-            if (found_memory && found_pid && found_name) {
+            if (found_memory && found_pid && 0) {
                 printf("Name: %s | PID: %d | Memory: %d kB\n", current_process.name, current_process.pid, current_process.memory_kb);
             }
-            
+
             fclose(process_info);
         }
     }
