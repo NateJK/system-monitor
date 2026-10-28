@@ -2,6 +2,8 @@
 #include <string.h>
 #include <dirent.h>
 #include <ctype.h>
+#include <stdlib.h>
+#include <stddef.h>
 
 // Start of the source c code for system_monitor application
 
@@ -29,6 +31,10 @@ int is_numeric(const char *name) {
 }
 
 int main(void) {
+
+    struct Process *processes = NULL;
+    size_t process_count = 0;
+    size_t capacity = 0;
 
     char line[256];
 
@@ -78,15 +84,44 @@ int main(void) {
                 }
             }
 
-            if (found_memory && found_pid && 0) {
-                printf("Name: %s | PID: %d | Memory: %d kB\n", current_process.name, current_process.pid, current_process.memory_kb);
-            }
+            if (found_memory && found_pid && found_name) {
+                // printf("Name: %s | PID: %d | Memory: %d kB\n", current_process.name, current_process.pid, current_process.memory_kb);
 
+                if (capacity == process_count) {
+                    if (capacity == 0) {
+                        capacity = 16;
+                    } else {
+                        capacity *= 2; 
+                    }
+
+                    struct Process *temp = realloc(processes, capacity * sizeof(struct Process));
+
+                    if (temp == NULL) {
+                        free(processes);
+                        fclose(process_info);
+                        closedir(proc_dir);
+                        perror("realloc");
+
+                        return 1;
+                    } else {
+                        processes = temp;
+                    } 
+                }
+
+                processes[process_count] = current_process;
+                process_count++;
+            }
             fclose(process_info);
         }
     }
-
     closedir(proc_dir);
 
+    for (size_t i = 0; i < process_count; i++) {
+        printf("Name: %s | PID: %d | Memory: %d kB\n",
+           processes[i].name,
+           processes[i].pid,
+           processes[i].memory_kb);
+    }
+    free(processes);
     return 0;
 }
