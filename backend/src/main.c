@@ -30,17 +30,6 @@ int is_numeric(const char *name) {
 
 int main(void) {
 
-    // Opens the file that contains the system information
-    FILE *sys_info;
-    sys_info = fopen("/proc/self/status", "r");
-
-    // Error checking if the file is unable to be opened
-    if (sys_info == NULL) {
-        perror("fopen");
-
-        return 1;
-    }
-
     char line[256];
 
     DIR *proc_dir = opendir("/proc");
