@@ -30,6 +30,19 @@ int is_numeric(const char *name) {
     return 1;
 }
 
+int compare_memory(const void *a, const void *b) {
+    const struct Process *process_a = (const struct Process *)a;
+    const struct Process *process_b = (const struct Process *)b;
+
+    if (process_a->memory_kb > process_b->memory_kb) {
+        return -1;
+    } else if (process_a->memory_kb < process_b->memory_kb) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
 int main(void) {
 
     struct Process *processes = NULL;
@@ -115,6 +128,8 @@ int main(void) {
         }
     }
     closedir(proc_dir);
+
+    qsort(processes, process_count, sizeof(struct Process), compare_memory);
 
     for (size_t i = 0; i < process_count; i++) {
         printf("Name: %s | PID: %d | Memory: %d kB\n",
