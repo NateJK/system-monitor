@@ -142,7 +142,9 @@ int main(void) {
 
     printf("TOP 20 PROCESSES\n");
 
-    for (size_t i = 0; i < 20; i++) {
+    size_t limit = process_count < 20 ? process_count : 20;
+
+    for (size_t i = 0; i < limit; i++) {
         printf("Name: %s | PID: %d | Memory: %d kB\n",
            processes[i].name,
            processes[i].pid,
