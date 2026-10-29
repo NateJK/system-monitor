@@ -137,6 +137,18 @@ int main(void) {
            processes[i].pid,
            processes[i].memory_kb);
     }
+
+    // top 20 memory
+
+    printf("TOP 20 PROCESSES\n");
+
+    for (size_t i = 0; i < 20; i++) {
+        printf("Name: %s | PID: %d | Memory: %d kB\n",
+           processes[i].name,
+           processes[i].pid,
+           processes[i].memory_kb);
+    }
+
     free(processes);
     return 0;
 }
